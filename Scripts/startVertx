@@ -1,0 +1,14 @@
+#!/bin/bash
+cd /home/ubuntu/WebChatVertx/src/main/java/
+IP=$(curl -L http://169.254.169.254/latest/meta-data/public-ipv4)
+cp com/globex/resources/index.html.original com/globex/resources/index.html
+IP2=${IP//./-}
+#echo $IP
+#echo $IP2
+IPfinal="ec2-$IP2.eu-west-1.compute.amazonaws.com"
+#echo $IPfinal
+sed -i "s/localhost/$IPfinal/g" com/globex/resources/index.html
+PATH=$PATH:/home/ubuntu/vert.x-2.1.5/bin
+export VERTX_OPTS="-Xmx800m"
+vertx run com/globex/app/ChatManager.java -cluster
+
